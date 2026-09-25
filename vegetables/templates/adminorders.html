@@ -1,0 +1,269 @@
+{% extends 'adminheader.html' %}
+{% load static %}
+{% block b1 %}
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+
+  .containers {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    max-width: 1800px; /* Increased width */
+    margin: 90px auto; /* This centers it within its available parent space */
+    width: 65%; /* Added to ensure it doesn't try to exceed the viewport */
+    margin-left:400px;
+}
+
+    h2 {
+        margin: 0 0 20px;
+        font-weight: 600;
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        outline: none;
+    }
+
+    .btn-add {
+        background: #22c55e;
+        padding: 12px 18px;
+        border-radius: 8px;
+        color: white;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        padding: 14px 10px;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+        font-size: 15px;
+    }
+
+    th {
+        background: #f8f8f8;
+        font-weight: 600;
+    }
+
+
+    .status-active {
+        background: #d4fce0;
+        color: #1f9d4a;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+    }
+    .status-pending {
+        background: #ffe7c4;
+        color: #b4720e;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+    }
+
+    .btn-edit {
+        background: #3b82f6;
+        color: white;
+        padding: 7px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-delete {
+        background: #ef4444;
+        color: white;
+        padding: 7px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Responsive Table */
+    @media(max-width: 768px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
+        }
+        th {
+            display: none;
+        }
+        tr {
+            margin-bottom: 12px;
+            background: #f8f8f8;
+            padding: 12px;
+            border-radius: 10px;
+        }
+        td {
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        td:before {
+            content: attr(data-label);
+            font-weight: 600;
+        }
+    }
+.status-active {
+    padding: 4px 10px;
+    background: #d4f8d4;
+    color: #0f7b0f;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.status-pending {
+    padding: 4px 10px;
+    background: #ffeccc;
+    color: #cc8a00;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.status-out {
+    padding: 4px 10px;
+    background: #fff2cc;
+    color: #cc8a00;
+    border-radius: 6px;
+    font-weight: 600;
+}
+    .product-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* centers horizontally */
+    justify-content: center; /* optional */
+    gap: 8px;
+}
+</style>
+
+
+<div class="containers" style="padding-right:30px;">
+
+   <div class="top-bar">
+    <h2>All Orders</h2>
+</div>
+
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search orders...">
+</div>
+
+<div class="table-wrapper">
+<table id="userTable">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Status</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+
+   <tbody>
+{% for p in payments %}
+    <tr>
+        <td>{{ p.id }}</td>
+
+        <td>{{ p.user.name }}</td>
+
+        <td class="product-cell">
+            {% for item in p.items.all %}
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+
+                {% if item.product_image %}
+                    <img src="{{ item.product_image.url }}" style="width:60px;height:60px;border-radius:8px;object-fit:cover;">
+                {% else %}
+                    no image
+                {% endif %}
+
+                <div>
+                    <div style="font-weight:600;">{{ item.product_name }}</div>
+                    <div style="color:#28a745;font-weight:500;">₹{{ item.product_price }}-{{ item.quantity }}kg</div>
+
+                </div>
+
+            </div>
+            {% endfor %}
+        </td>
+
+<!--        <td>-->
+<!--            {% for item in p.items.all %}-->
+<!--                <div>{{ item.quantity }}kg</div>-->
+<!--            {% endfor %}-->
+<!--        </td>-->
+
+       <td>
+    {% if p.status == "Delivered" %}
+        <span class="status-active" style="background:#d4f8d4;color:#0f7b0f;">
+            Delivered
+        </span>
+
+    {% elif p.status == "Cancelled" %}
+        <span class="status-pending" style="background:#ffd9d9;color:#b30000;">
+            Cancelled
+        </span>
+
+    {% elif p.status == "Out for Delivery" %}
+        <span class="status-out" style="background:#fff2cc;color:#cc8a00;">
+            Out for Delivery
+        </span>
+
+    {% else %}
+        <span class="status-pending">Pending</span>
+    {% endif %}
+</td>
+
+
+        <td>₹{{ p.totalprice }}</td>
+    </tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+
+
+</div>
+
+
+</div>
+
+
+<script>
+// Live Search Filter
+document.getElementById("searchInput").addEventListener("keyup", function () {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#userTable tbody tr");
+
+    rows.forEach(row => {
+        let text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
+    });
+});
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        main.main-content {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+.container, .container-fluid {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+       body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #b2f7b0 0%, #8be79b 100%);
+    min-height: 100vh;
+}
+
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position:fixed;
+            z-index: 9999;
+            height: 1000px;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 0 1.5rem 2rem;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 1.5rem;
+        }
+
+        .menu-item {
+            padding: 1rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: #667eea;
+            color: white;
+            padding-left: 2rem;
+        }
+
+        .menu-item.active {
+            background: #667eea;
+            color: white;
+            border-right: 4px solid #764ba2;
+        }
+
+        .menu-icon {
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+    flex: 1;
+    padding: 0 !important;
+    padding-top: 2rem !important;  /* Keep top spacing only */
+}
+
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h2 {
+            color: #333;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-card .change {
+            font-size: 0.9rem;
+            color: #10b981;
+            margin-top: 0.5rem;
+        }
+
+        .content-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h3 {
+            color: #333;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        th {
+            background: #f9f9f9;
+            color: #666;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .status.active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status.pending {
+            background: #fed7aa;
+            color: #92400e;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: opacity 0.3s;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+
+        .edit-btn {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>📊 Admin Panel</h1>
+            </div>
+           <nav>
+    <a href='/admins/' class="menu-item">
+        <span class="menu-icon">📈</span>
+        Dashboard
+    </a>
+
+    <a href='/adminuser/' class="menu-item">
+        <span class="menu-icon">👥</span>
+        Users
+    </a>
+
+      <a href='/admindelivery/' class="menu-item">
+        <span class="menu-icon">🚚</span>
+        Delivery
+    </a>
+
+    <a href='/adminpro/' class="menu-item">
+        <span class="menu-icon">📦</span>
+        Products
+    </a>
+
+
+
+    <a href='/adminorder/' class="menu-item">
+        <span class="menu-icon">🛒</span>
+        Orders
+    </a>
+
+    <a href="/adminfeedback/" class="menu-item">
+    <span class="menu-icon">💬</span>
+    feedback
+</a>
+
+</nav>
+
+        </aside>
+        {% block b1 %}
+
+         <main class="main-content">
+            <div class="header">
+                <h2>Dashboard Overview</h2>
+                <div class="user-info">
+                    <span>Admin User</span>
+                    <div class="user-avatar">A</div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <div class="value">2,543</div>
+                    <div class="change">↑ 12% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <div class="value">$45,231</div>
+                    <div class="change">↑ 8% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Orders</h3>
+                    <div class="value">156</div>
+                    <div class="change">↑ 23% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Products</h3>
+                    <div class="value">892</div>
+                    <div class="change">↑ 5% from last month</div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-header">
+                    <h3>Recent Users</h3>
+                    <button class="btn">Add New User</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>001</td>
+                            <td>John Doe</td>
+                            <td>john@example.com</td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="actions">
+                                <button class="action-btn edit-btn">Edit</button>
+                                <button class="action-btn delete-btn">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>002</td>
+                            <td>Jane Smith</td>
+                            <td>jane@example.com</td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="actions">
+                                <button class="action-btn edit-btn">Edit</button>
+                                <button class="action-btn delete-btn">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>003</td>
+                            <td>Mike Johnson</td>
+                            <td>mike@example.com</td>
+                            <td><span class="status pending">Pending</span></td>
+                            <td class="actions">
+                                <button class="action-btn edit-btn">Edit</button>
+                                <button class="action-btn delete-btn">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>004</td>
+                            <td>Sarah Williams</td>
+                            <td>sarah@example.com</td>
+                            <td><span class="status active">Active</span></td>
+                            <td class="actions">
+                                <button class="action-btn edit-btn">Edit</button>
+                                <button class="action-btn delete-btn">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+
+            {% endblock %}
+
+
+    <script>
+        function showSection(section) {
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => item.classList.remove('active'));
+            event.target.closest('.menu-item').classList.add('active');
+
+            document.querySelector('.header h2').textContent =
+                section.charAt(0).toUpperCase() + section.slice(1) + ' Overview';
+        }
+    </script>
+
+</html>

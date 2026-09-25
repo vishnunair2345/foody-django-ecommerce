@@ -1,0 +1,282 @@
+{% extends 'indexheader.html' %}
+{% load static %}
+{% block b1 %}
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 30px 0;
+    }
+
+    .order-container {
+      max-width: 900px;
+      margin: 10px auto;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 40px 50px;
+    }
+
+    .breadcrumb {
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .breadcrumb a {
+      color: #777;
+      text-decoration: none;
+    }
+
+    .order-header {
+      border-bottom: 1px solid #eaeaea;
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+
+    .order-header h2 {
+      font-size: 26px;
+      margin: 0;
+      color: #111;
+      font-weight: 600;
+    }
+
+    .order-meta {
+      color: #555;
+      font-size: 15px;
+      margin-top: 8px;
+    }
+
+    .order-meta span {
+      margin-right: 15px;
+    }
+
+    .status {
+      color: #28a745;
+      font-weight: 500;
+    }
+
+    .product-list {
+      margin-top: 25px;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+
+    .product {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      border-bottom: 1px solid #f3f3f3;
+    }
+
+    .product:last-child {
+      border-bottom: none;
+    }
+
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .product-info img {
+      width: 65px;
+      height: 65px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid #eee;
+    }
+
+    .product-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: #222;
+    }
+
+    .product-name small {
+      display: block;
+      color: #888;
+      font-size: 13px;
+    }
+
+    .product-price {
+      text-align: right;
+    }
+
+    .product-price strong {
+      font-size: 16px;
+      color: #000;
+    }
+
+    .product-price span {
+      display: block;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .summary {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .summary div {
+      width: 48%;
+    }
+
+    .summary h4 {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .summary p {
+      color: #555;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .total {
+      text-align: right;
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    .btn-group {
+      text-align: right;
+      margin-top: 25px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .btn-invoice {
+      background: #f3f3f3;
+      color: #333;
+      margin-right: 10px;
+    }
+
+    .btn-invoice:hover {
+      background: #e8e8e8;
+    }
+
+    .btn-track {
+      background: #007bff;
+      color: #fff;
+    }
+
+    .btn-track:hover {
+      background: #006ae0;
+    }
+  </style>
+
+
+{% for pay in payments %}
+<div class="order-container">
+  <div class="breadcrumb">
+    <a href='/index/'>Home</a> › <a href="#">Orders</a> › ID {{ pay.id }}
+  </div>
+
+  <div class="order-header">
+    <h2>Order ID: {{ pay.id }}</h2>
+    <div class="order-meta">
+      <span>Order date: {{ pay.date|date:"M d, Y – h:i A" }}</span><br>
+
+      <span class="status">STATUS:</span>
+        {% if pay.status == 'Delivered' %}
+        <span style="color: green;">{{ pay.status }}</span>
+      {% elif pay.status == 'Out for Delivery' %}
+        <span style="color: orange;">{{ pay.status }}</span>
+      {% elif pay.status == 'Cancelled' %}
+        <span style="color: red;">{{ pay.status }}</span>
+      {% else %}
+        <span style="color: gray;">{{ pay.status }}</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="product-list">
+    {% for item in pay.items.all %}
+    <div class="product">
+      <div class="product-info">
+        {% if item.product_image %}
+        <img src="{{ item.product_image.url }}" alt="{{ item.product_name }}">
+      {% elif item.product %}
+        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+      {% else %}
+        <img src="{% static 'images/no-image.png' %}" alt="No image">
+      {% endif %}
+        <div>
+          <div class="product-name">
+              {% if item.product_name %}
+              {{ item.product_name }}
+            {% elif item.product %}
+              {{ item.product.name }}
+            {% else %}
+              Deleted Product
+            {% endif %}
+
+            <small>{{ item.product.category|default:"" }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="product-price">
+        {% if item.product_price %}
+        <strong>₹{{ item.product_price }}</strong>
+      {% elif item.product %}
+        <strong>₹{{ item.product.price }}</strong>
+      {% else %}
+        <strong>₹0</strong>
+      {% endif %}
+        <span>Qty: {{ item.quantity }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="summary">
+    <div>
+      <h4>Payment</h4>
+      <p>{{ pay.payment }}</p>
+    </div>
+    <div>
+      <h4>Delivery</h4>
+      <p>{{ pay.address }}</p>
+    </div>
+  </div>
+
+  <div class="total">
+    Total Paid: ₹{{ pay.totalprice }}
+  </div>
+{% if pay.status == "Pending" %}
+    <form method="post" action="{% url 'cancel' pay.id %}" >
+        {% csrf_token %}
+  <div class="btn-group">
+    <button type="submit" class="btn btn-track" style="background:#dc3545;">Cancel Order</button>
+  </div>
+    </form>
+    {% endif %}
+</div>
+{% empty %}
+<div style="text-align:center; margin-top:60px; color:#666;">
+  No orders found.
+</div>
+{% endfor %}
+
+{% endblock %}

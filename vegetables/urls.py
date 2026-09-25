@@ -1,0 +1,46 @@
+from django.conf import settings
+from django .urls import path
+from vegetables import views
+from vegetablestore import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+path('',views.home,name='home'),
+path('index/', views.index, name='index'),
+path('acc/', views.account),
+path('aboutus/', views.aboutus),
+path('delabout/',views.delabout),
+path('product/', views.product,name='product'),
+path('login/',views.login,name='login'),
+path('cart/<int:id>/',views.carts,name='cart'),
+path('cart_page/',views.cart_page,name='cart_page'),
+path('dele_item/<int:id>/',views.dele_item,name='dele_item'),
+path('payment/',views.payments,name='payment'),
+path('userlogout/',views.userlogout),
+path('dellogout/',views.dellogout),
+path('delacc/',views.delveracc),
+path('orderhistory/', views.order_history, name='order_history'),
+path('delindex/',views.deliveryindex,name='delindex'),
+path('dellogin/',views.dellogin,name='dellogin'),
+path('delorder/',views.delorder,name='delorder'),
+path('delorderhistory/<int:id>/', views.delorderhistory, name='delorderhistory'),
+path('order/',views.delorderview,name='order'),
+path('oderproduct/<int:id>/items/',views.oderproduct,name='oderproduct'),
+path('mark-delivered/<int:id>/', views.mark_delivered, name='mark_delivered'),
+path('mark-out/<int:id>/', views.mark_out, name='mark_out'),
+path('cancel/<int:id>/',views.cancelled,name='cancel'),
+path('uprofile/',views.userupdate,name='uprofile'),
+path('userdelete/',views.userdelete,name='userdelete'),
+path('delupdate/',views.deliveryupdate,name='delupdate'),
+path('deldelete/',views.deliverydelete,name='deldelete'),
+path('feedback/',views.userfeedback,name='feedback'),
+path('admins/',views.admin,name='admins'),
+path('adminpro/',views.adminpro,name='adminpro'),
+path('delproduct/<int:id>/',views.delproduct,name='delproduct'),
+path('editproduct/<int:id>',views.editproduct,name='editproduct'),
+path('adminuser/',views.adminuser,name='adminuser'),
+path('admindelivery/',views.admindelivery,name='admindelivery'),
+path('adminfeedback/',views.adminfeedback,name='adminfeedback'),
+path('adminorder/',views.adminorders,name='adminorder'),
+path('adminlogin/',views.adminlogin,name='adminlogin'),
+]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

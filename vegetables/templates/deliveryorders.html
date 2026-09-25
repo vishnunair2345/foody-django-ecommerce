@@ -1,0 +1,162 @@
+{% extends 'deliveryheader.html' %}
+{% load static %}
+{% block b1 %}
+  <style>
+body {
+  background: #f4f6f8;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 20px;
+
+}
+
+.order-box {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  padding: 20px;
+  margin-bottom: 40px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top:30px
+
+}
+
+.order-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.order-id {
+  color: #4a90e2;
+  font-weight: 600;
+}
+
+.customer-name {
+  color: #333;
+}
+
+.order-date {
+  font-size: 0.9em;
+  color: #777;
+}
+
+.order-details p {
+  margin: 6px 0;
+  font-size: 0.95em;
+}
+
+.order-details strong {
+  color: #333;
+}
+
+.order-footer {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.view-btn {
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.3s ease;
+}
+
+.view-btn:hover {
+  background: #357abd;
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  color: white;
+}
+
+.status-pending { background: #f0ad4e; }
+.status-out { background: #17a2b8; }
+.status-delivered { background: #28a745; }
+.status-cancelled { background: #dc3545; }
+
+.no-orders {
+  text-align: center;
+  font-size: 1.1em;
+  color: #777;
+  margin-top: 40px;
+}
+  </style>
+
+
+{% for pay in payments %}
+  <div class="order-box">
+    <div class="order-header">
+      <div>
+        <span class="order-id">Order #{{ pay.id }}</span> —
+        <strong class="customer-name">{{ pay.name }}</strong>
+      </div>
+      <span class="order-date">{{ pay.date|date:"M d, Y – h:i A" }}</span>
+    </div>
+
+    <div class="order-details">
+      <p><strong>Email:</strong> {{ pay.email }}</p>
+      <p><strong>Address:</strong> {{ pay.address }}</p>
+      <p><strong>Payment Method:</strong> {{ pay.payment }}</p>
+      <p>
+        <strong>Status:</strong>
+        {% if pay.status == "Pending" %}
+          <span class="status-badge status-pending">Pending</span>
+        {% elif pay.status == "Out for Delivery" %}
+          <span class="status-badge status-out">Out for Delivery</span>
+        {% elif pay.status == "Delivered" %}
+          <span class="status-badge status-delivered">Delivered</span>
+        {% elif pay.status == "Cancelled" %}
+          <span class="status-badge status-cancelled">Cancelled</span>
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="order-footer">
+      <p><strong>Total:</strong> ₹{{ pay.totalprice }}</p>
+
+      <div>
+        <a href="{% url 'oderproduct' pay.id %}">
+          <button class="view-btn">View Items</button>
+        </a>
+
+        {% if pay.status == "Pending" %}
+          <form method="POST" action="{% url 'mark_out' pay.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="view-btn" style="background:#17a2b8;">Out for Delivery</button>
+          </form>
+        {% elif pay.status == "Out for Delivery" %}
+          <form method="POST" action="{% url 'mark_delivered' pay.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="view-btn" style="background:#28a745;">Mark Delivered</button>
+          </form>
+          {% elif pay.status == "Cancelled" %}
+              <button type="submit" class="view-btn" style="background:grey;" disabled>Cancelled</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <p class="no-orders">No orders assigned to you yet.</p>
+{% endfor %}
+
+{% endblock %}

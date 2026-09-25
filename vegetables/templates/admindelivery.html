@@ -1,0 +1,195 @@
+{% extends 'adminheader.html' %}
+{% load static %}
+{% block b1 %}
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+
+  .containers {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    max-width: 1800px; /* Increased width */
+    margin: 90px auto; /* This centers it within its available parent space */
+    width: 65%; /* Added to ensure it doesn't try to exceed the viewport */
+    margin-left:400px;
+}
+
+    h2 {
+        margin: 0 0 20px;
+        font-weight: 600;
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        outline: none;
+    }
+
+    .btn-add {
+        background: #22c55e;
+        padding: 12px 18px;
+        border-radius: 8px;
+        color: white;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        padding: 14px 10px;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+        font-size: 15px;
+    }
+
+    th {
+        background: #f8f8f8;
+        font-weight: 600;
+    }
+
+
+    .status-active {
+        background: #d4fce0;
+        color: #1f9d4a;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+    }
+    .status-pending {
+        background: #ffe7c4;
+        color: #b4720e;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+    }
+
+    .btn-edit {
+        background: #3b82f6;
+        color: white;
+        padding: 7px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-delete {
+        background: #ef4444;
+        color: white;
+        padding: 7px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Responsive Table */
+    @media(max-width: 768px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
+        }
+        th {
+            display: none;
+        }
+        tr {
+            margin-bottom: 12px;
+            background: #f8f8f8;
+            padding: 12px;
+            border-radius: 10px;
+        }
+        td {
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        td:before {
+            content: attr(data-label);
+            font-weight: 600;
+        }
+    }
+
+</style>
+
+
+<div class="containers" style="padding-right:30px;">
+
+    <div class="top-bar">
+        <h2>All Delivery Persons</h2>
+</div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search users by name, email, or ID...">
+    </div>
+    <div class="table-wrapper">
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Phone no.</th>
+                <th>place</th>
+                <th>Email</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for u in dell %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.name }}</td>
+                <td>{{ u.age }}</td>
+                <td>{{ u.phone }}</td>
+                <td>{{ u.place }}</td>
+                <td>{{ u.email }}</td>
+<!--                <td data-label="Actions">-->
+<!--                    <button class="btn-edit">Edit</button>-->
+<!--                    <button class="btn-delete">Delete</button>-->
+<!--                </td>-->
+            </tr>
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+    </div>
+
+</div>
+
+
+<script>
+// Live Search Filter
+document.getElementById("searchInput").addEventListener("keyup", function () {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#userTable tbody tr");
+
+    rows.forEach(row => {
+        let text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? "" : "none";
+    });
+});
+</script>
+
+
+{% endblock %}

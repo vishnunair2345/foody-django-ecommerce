@@ -1,0 +1,188 @@
+<div class="order-items-container">
+  <h2>🧾 Order #{{ order.id }} — Item Details</h2>
+
+  <div class="order-summary">
+    <p><strong>Customer:</strong> {{ order.name }}</p>
+    <p><strong>Payment Method:</strong> {{ order.payment }}</p>
+    <p><strong>Total:</strong> ₹{{ order.totalprice }}</p>
+  </div>
+
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order.items.all %}
+      <tr>
+        <td>
+          <div class="product-img">
+
+      {% if item.product_image %}
+        <img src="{{ item.product_image.url }}" alt="Product Image">
+      {% elif item.product and item.product.image %}
+        <img src="{{ item.product.image.url }}" alt="Product Image">
+      {% else %}
+        no image
+      {% endif %}
+
+          </div>
+        </td>
+        <td>{{ item.product_name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>₹{{ item.product_price }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" style="text-align:center;">No items found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="btn-container">
+    <a href="/order/" class="btn-back">← Back to Orders</a>
+  </div>
+</div>
+
+<style>
+body {
+  background: #f5f6f8;
+  font-family: "Inter", sans-serif;
+  color: #333;
+}
+
+/* Main box */
+.order-items-container {
+  max-width: 900px;
+  margin: 50px auto;
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.order-items-container h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.order-summary {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background: #f9fafb;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.03);
+}
+
+.order-summary p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+/* Table */
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.items-table thead {
+  background: #007bff;
+  color: white;
+}
+
+.items-table th, .items-table td {
+  text-align: left;
+  padding: 14px;
+  font-size: 0.95em;
+}
+
+.items-table tbody tr {
+  background: #fff;
+  transition: background 0.25s ease;
+}
+
+.items-table tbody tr:hover {
+  background: #f5f9ff;
+}
+
+.items-table td {
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+/* Product image */
+.product-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.product-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-img img:hover {
+  transform: scale(1.08);
+}
+
+/* Button */
+.btn-container {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.btn-back {
+  display: inline-block;
+  text-decoration: none;
+  background: #007bff;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 500;
+  box-shadow: 0 3px 8px rgba(0, 123, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background: #005dc8;
+  box-shadow: 0 5px 12px rgba(0, 123, 255, 0.35);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .order-items-container {
+    padding: 25px;
+  }
+  .order-summary {
+    flex-direction: column;
+  }
+  .items-table th, .items-table td {
+    font-size: 0.85em;
+    padding: 10px;
+  }
+}
+</style>

@@ -1,0 +1,250 @@
+{% extends 'indexheader.html' %}
+{% load static %}
+{% block b1 %}
+ <meta charset="utf-8">
+    <title>Foody - Organic Food Website Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    background: #f9f9f9;
+  }
+
+  .cart-container {
+    max-width: 1100px;
+    margin: 20px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    padding: 40px 30px;
+    animation: fadeIn 0.6s ease;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 600;
+    color: #222;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    text-align: center;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  th {
+    font-weight: 600;
+    color: #777;
+  }
+
+  td img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .product-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .price, .total {
+    font-size: 15px;
+    color: #555;
+  }
+
+  .quantity {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f7f7;
+    border-radius: 50px;
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .remove {
+    display: inline-block;
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+
+  .remove:hover {
+    background-color: #ff7875;
+  }
+
+  .cart-bottom {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 15px 0;
+    border-top: 1px solid #eee;
+  }
+
+  .total-price {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .total-price span {
+    color: #777;
+    margin-right: 8px;
+  }
+
+  .proceed-btn {
+    padding: 12px 32px;
+    border-radius: 30px;
+    border: none;
+    background: linear-gradient(90deg, #00c853, #00bfa5);
+    color: #fff;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 191, 165, 0.4);
+  }
+
+  .proceed-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 200, 83, 0.5);
+    background: linear-gradient(90deg, #00e676, #1de9b6);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 20px; }
+    table, th, td { font-size: 14px; }
+    td img { width: 50px; height: 50px; }
+    .cart-bottom { flex-direction: column; align-items: stretch; }
+    .total-price { text-align: center; margin-bottom: 10px; }
+    .proceed-btn { width: 100%; }
+  }
+</style>
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s" style="background: #f6f6f6 url('{% static 'img/carousel-2.jpg' %}') center/cover no-repeat;">
+    <div class="container py-5">
+        <h1 class="display-3 text-dark animated slideInDown">Cart</h1>
+        <nav aria-label="breadcrumb animated slideInDown">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href='/index/'>Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Cart</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Page Header End -->
+
+
+<div class="cart-container">
+  <h2>Your Shopping Cart 🛒</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Products</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+        <th>Handle</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in cart_items %}
+      <tr>
+        <td><img src="{{ i.product.image.url }}" alt="{{ i.product.name }}"></td>
+        <td class="product-name">{{ i.product.name }}</td>
+        <td class="price">{{ i.product.price }}$</td>
+        <td><div class="quantity">{{ i.quantity }}</div></td>
+        <td class="total">{{ i.total_price }}$</td>
+        <td>
+          <a href="{% url 'dele_item' i.id %}" class="remove" >✕</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="cart-bottom">
+    <div class="total-price">
+      <span>Total:</span> <strong>${{ price }}</strong>
+    </div>
+      <a href="{% url 'payment' %}?total={{ price }}" button class="proceed-btn">Buy</button></a>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% if messages %}
+<script>
+    {% for message in messages %}
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '{{ message }}',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    {% endfor %}
+</script>
+{% endif %}
+
+
+{% endblock %}
